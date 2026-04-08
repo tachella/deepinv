@@ -134,6 +134,26 @@ Phantoms
     deepinv.utils.phantoms.SheppLoganDataset
     deepinv.utils.phantoms.RandomPhantomDataset
 
+Phantoms
+--------
+
+.. autosummary::
+   :toctree: stubs
+   :template: myfunc_template.rst
+   :nosignatures:
+
+    deepinv.utils.phantoms.generate_shepp_logan
+    deepinv.utils.phantoms.generate_random_phantom
+
+
+.. autosummary::
+   :toctree: stubs
+   :template: myclass_template.rst
+   :nosignatures:
+
+    deepinv.utils.phantoms.SheppLoganDataset
+    deepinv.utils.phantoms.RandomPhantomDataset
+
 Other
 -----
 
