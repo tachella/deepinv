@@ -11,7 +11,7 @@ import torch.nn as nn
 from deepinv.physics.noise import NoiseModel, GaussianNoise, ZeroNoise
 from deepinv.utils.tensorlist import randn_like, TensorList
 from deepinv.optim.utils import least_squares, lsqr, least_squares_implicit_backward
-from deepinv.utils.compat import zip_strict
+
 from deepinv.physics.functional import power_method
 import warnings
 
@@ -707,7 +707,7 @@ class LinearPhysics(Physics):
             V = [randn_like(au) for au in Au]
             Atv = self.A_adjoint(V, **kwargs)
             s1 = 0
-            for au, v in zip_strict(Au, V):
+            for au, v in zip(Au, V, strict=True):
                 s1 += (v.conj() * au).flatten().sum()
 
         else:
@@ -995,8 +995,8 @@ class DecomposablePhysics(LinearPhysics):
 
         A = U\text{diag}(s)V^{\top} \in \mathbb{R}^{m\times n}
 
-    where :math:`U\in\mathbb{C}^{n\times n}` and :math:`V\in\mathbb{C}^{m\times m}`
-    are orthonormal linear transformations and :math:`s\in\mathbb{R}_{+}^{n}` are the singular values.
+    where :math:`U\in\mathbb{C}^{m\times m}` and :math:`V\in\mathbb{C}^{n\times n}`
+    are orthonormal linear transformations and :math:`\text{diag}(s)\in\mathbb{R}_{+}^{m \times n}` is the possibly rectangular singular values matrix.
 
     :param None | Callable U: orthonormal transformation. If `None` (default), it is set to the identity function.
     :param None | Callable V_adjoint: transpose of V. If `None` (default), it is set to the identity function.
@@ -1054,12 +1054,10 @@ class DecomposablePhysics(LinearPhysics):
     ):
         super().__init__(device=device, **kwargs)
 
-        assert not (
-            U is None and not (U_adjoint is None)
-        ), "U must be provided if U_adjoint is provided."
-        assert not (
-            V_adjoint is None and not (V is None)
-        ), "V_adjoint must be provided if V is provided."
+        if U is None and not (U_adjoint is None):  # pragma: no cover
+            raise ValueError("U must be provided if U_adjoint is provided.")
+        if V_adjoint is None and not (V is None):  # pragma: no cover
+            raise ValueError("V_adjoint must be provided if V is provided.")
 
         # set to identity if not provided
         self._V_adjoint = (lambda x: x) if V_adjoint is None else V_adjoint
