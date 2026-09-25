@@ -2,12 +2,18 @@ r"""
 Vanilla Unfolded algorithm for super-resolution
 ====================================================================================================
 
-This is a simple example to show how to use vanilla unfolded Plug-and-Play.
-The DnCNN denoiser and the algorithm parameters (stepsize, regularization parameters) are trained jointly.
-For simplicity, we show how to train the algorithm on a  small dataset. For optimal results, use a larger dataset.
+This is a simple example to show how to use vanilla unfolded Plug-and-Play on a super-resolution problem.
+In this example, a DnCNN denoiser and the algorithm parameters (stepsize, regularization parameters) are trained jointly as
+part of the unfolded algorithm.
+
+.. note::
+
+    For simplicity, we show how to train the algorithm on a  small dataset. For optimal results, use a larger dataset.
+
 """
 
-# %%
+# sphinx_gallery_tags = ["Super-resolution"]
+
 import deepinv as dinv
 import torch
 from deepinv.models.utils import get_weights_url
